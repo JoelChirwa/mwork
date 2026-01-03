@@ -1,0 +1,12 @@
+{
+  "name": "mwork",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix admin && npm run build --prefix admin"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
