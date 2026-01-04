@@ -2,8 +2,8 @@ import { Inngest } from 'inngest';
 import User from '../models/User.js';
 
 export const inngest = new Inngest({
-  id: 'mwork-backend',
-  name: 'MworK Backend'
+  id: 'mwork',
+  name: 'MworK'
 });
 
 export const syncClerkUser = inngest.createFunction(
@@ -42,4 +42,6 @@ export const syncClerkUser = inngest.createFunction(
     });
   }
 );
+
+
 

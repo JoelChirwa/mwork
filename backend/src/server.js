@@ -6,6 +6,10 @@ import connectDB from './config/db.js';
 import { serve } from 'inngest/express';
 import { inngest, syncClerkUser } from './config/inngest.js';
 import onboardingRoutes from './routes/onboarding.routes.js';
+import employerProfileRoutes from './routes/employerProfile.routes.js';
+import jobRoutes from './routes/job.routes.js';
+import subscriptionRoutes from './routes/subscription.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
 
@@ -24,7 +28,10 @@ app.use(
 
 // Routes
 app.use('/api/onboarding', onboardingRoutes);
-
+app.use('/api/employer', employerProfileRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/subscription', subscriptionRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({ message: 'OK' });
