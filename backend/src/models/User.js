@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       index: true
     },
+    
+    profileImageUrl: {
+      type: String,
+      default: null
+    },
+
 
     location: {
       district: { type: String, required: true },
