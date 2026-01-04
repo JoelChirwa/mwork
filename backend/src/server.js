@@ -3,6 +3,9 @@ import path from 'path';
 import { clerkMiddleware } from '@clerk/express'
 import { ENV } from './config/env.js';
 import connectDB from './config/db.js';
+import { serve } from '@inngest/express';
+import { inngest, syncClerkUser } from './config/inngest.js';
+import onboardingRoutes from './routes/onboarding.routes.js';
 
 const app = express();
 
@@ -11,6 +14,17 @@ const __dirname = path.resolve();
 // Middleware
 app.use(clerkMiddleware()); // adds auth object under the request
 app.use(express.json());
+app.use(
+  '/api/inngest',
+  serve({
+    client: inngest,
+    functions: [syncClerkUser]
+  })
+);
+
+// Routes
+app.use('/api/onboarding', onboardingRoutes);
+
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({ message: 'OK' });
