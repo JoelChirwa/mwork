@@ -9,7 +9,10 @@ import { Toaster } from 'react-hot-toast';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-if (!PUBLISHABLE_KEY) throw new Error('Missing Publishable Key');
+if (!PUBLISHABLE_KEY) {
+  console.error('Environment variables:', import.meta.env);
+  throw new Error('Missing Publishable Key. Please ensure VITE_CLERK_PUBLISHABLE_KEY is set in your .env file and restart the dev server.');
+}
 
 const queryClient = new QueryClient();
 
