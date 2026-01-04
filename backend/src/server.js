@@ -3,7 +3,7 @@ import path from 'path';
 import { clerkMiddleware } from '@clerk/express'
 import { ENV } from './config/env.js';
 import connectDB from './config/db.js';
-import { serve } from '@inngest/express';
+import { serve } from 'inngest/express';
 import { inngest, syncClerkUser } from './config/inngest.js';
 import onboardingRoutes from './routes/onboarding.routes.js';
 
