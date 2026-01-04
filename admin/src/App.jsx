@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
+import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
@@ -36,16 +37,17 @@ const RequireAdmin = ({ children, user }) => {
 
 function App() {
   const { user } = useUser();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <>
       <SignedIn>
         <RequireAdmin user={user}>
-          <div className="flex h-screen">
-            <Sidebar />
-            <div className="flex-1 flex flex-col">
-              <Navbar />
-              <div className="p-4 bg-gray-100 flex-1 overflow-auto">
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+              <div className="p-4 md:p-6 bg-gray-100 flex-1 overflow-auto">
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/workers" element={<Workers />} />

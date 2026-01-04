@@ -52,17 +52,17 @@ const Workers = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-3xl font-bold text-gray-800">Workers</h2>
-          <p className="text-gray-500 mt-1">{workers?.length || 0} total workers</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Workers</h2>
+          <p className="text-gray-500 mt-1 text-sm md:text-base">{workers?.length || 0} total workers</p>
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="bg-white rounded-lg shadow-sm p-4">
+      <div className="bg-white rounded-lg shadow-sm p-3 md:p-4">
         <input
           type="text"
           placeholder="Search by name, email, or phone..."

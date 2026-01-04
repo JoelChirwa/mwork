@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/mwork logo.png';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -13,14 +13,33 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col shadow-xl">
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`fixed lg:static inset-y-0 left-0 w-64 h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
+        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      }`}>
       {/* Logo Section */}
-      <div className="bg-white border-b border-gray-700">
+      <div className="bg-white border-b border-gray-700 relative">
         <img 
           src={logo} 
           alt="MworK Logo" 
           className="w-full h-auto object-cover"
         />
+        {/* Mobile Close Button */}
+        <button
+          onClick={onClose}
+          className="lg:hidden absolute top-4 right-4 text-gray-700 hover:text-gray-900 text-2xl font-bold"
+        >
+          ×
+        </button>
       </div>
 
       {/* Navigation */}
@@ -36,6 +55,7 @@ const Sidebar = () => {
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white'
               }`}
               to={item.path}
+              onClick={() => onClose()}
             >
               <span className="text-xl">{item.icon}</span>
               <span className="font-medium">{item.label}</span>
@@ -51,7 +71,8 @@ const Sidebar = () => {
           <p className="mt-1">© 2026 All rights reserved</p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

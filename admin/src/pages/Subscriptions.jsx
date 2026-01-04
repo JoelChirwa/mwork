@@ -50,17 +50,17 @@ const Subscriptions = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-3xl font-bold text-gray-800">Worker Subscriptions</h2>
-          <p className="text-gray-500 mt-1">{subscriptions?.length || 0} total subscriptions</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Worker Subscriptions</h2>
+          <p className="text-gray-500 mt-1 text-sm md:text-base">{subscriptions?.length || 0} total subscriptions</p>
         </div>
       </div>
 
       {/* Status Filter Tabs */}
-      <div className="bg-white rounded-lg shadow-sm p-4">
+      <div className="bg-white rounded-lg shadow-sm p-3 md:p-4">
         <div className="flex flex-wrap gap-2 mb-4">
           {Object.entries(statusCounts).map(([status, count]) => (
             <button
@@ -88,7 +88,7 @@ const Subscriptions = () => {
       </div>
 
       {/* Subscriptions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {filteredSubscriptions.length === 0 ? (
           <div className="col-span-full text-center py-12 bg-white rounded-lg shadow-sm">
             <p className="text-gray-500">

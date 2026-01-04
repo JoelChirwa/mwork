@@ -73,14 +73,14 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Welcome back! Here's what's happening today.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Dashboard</h1>
+          <p className="text-gray-500 mt-1 text-sm md:text-base">Welcome back! Here's what's happening today.</p>
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-xs md:text-sm text-gray-500">
           {new Date().toLocaleDateString('en-US', { 
             weekday: 'long', 
             year: 'numeric', 
@@ -91,8 +91,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">{stats.map((stat, index) => (
           <div
             key={index}
             className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
@@ -115,18 +114,18 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Recent Jobs */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Jobs</h3>
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+          <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-4">Recent Jobs</h3>
           <div className="space-y-3">
             {jobs.slice(0, 5).map((job, index) => (
               <div key={job._id || index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800 text-sm">{job.title}</p>
-                  <p className="text-xs text-gray-500">{job.location}</p>
+                <div className="flex-1 min-w-0 mr-2">
+                  <p className="font-medium text-gray-800 text-sm truncate">{job.title}</p>
+                  <p className="text-xs text-gray-500 truncate">{job.location}</p>
                 </div>
-                <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                <span className={`px-2 md:px-3 py-1 text-xs font-semibold rounded-full whitespace-nowrap ${
                   job.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 
                   job.status === 'COMPLETED' ? 'bg-blue-100 text-blue-700' : 
                   'bg-gray-100 text-gray-700'
@@ -136,22 +135,22 @@ const Dashboard = () => {
               </div>
             ))}
             {jobs.length === 0 && (
-              <p className="text-center text-gray-400 py-8">No jobs yet</p>
+              <p className="text-center text-gray-400 py-8 text-sm">No jobs yet</p>
             )}
           </div>
         </div>
 
         {/* Recent Subscriptions */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Subscriptions</h3>
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+          <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-4">Recent Subscriptions</h3>
           <div className="space-y-3">
             {subscriptions.slice(0, 5).map((sub, index) => (
               <div key={sub._id || index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800 text-sm">{sub.workerId?.fullName || 'Unknown'}</p>
-                  <p className="text-xs text-gray-500">{sub.workerId?.phoneNumber || 'N/A'}</p>
+                <div className="flex-1 min-w-0 mr-2">
+                  <p className="font-medium text-gray-800 text-sm truncate">{sub.workerId?.fullName || 'Unknown'}</p>
+                  <p className="text-xs text-gray-500 truncate">{sub.workerId?.phoneNumber || 'N/A'}</p>
                 </div>
-                <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                <span className={`px-2 md:px-3 py-1 text-xs font-semibold rounded-full whitespace-nowrap ${
                   sub.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                 }`}>
                   {sub.isActive ? 'Active' : 'Inactive'}
@@ -159,26 +158,26 @@ const Dashboard = () => {
               </div>
             ))}
             {subscriptions.length === 0 && (
-              <p className="text-center text-gray-400 py-8">No subscriptions yet</p>
+              <p className="text-center text-gray-400 py-8 text-sm">No subscriptions yet</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Quick Stats Bar */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
           <div className="text-center">
-            <div className="text-3xl font-bold">{((activeJobs / (jobs.length || 1)) * 100).toFixed(0)}%</div>
-            <div className="text-indigo-100 text-sm mt-1">Job Completion Rate</div>
+            <div className="text-2xl md:text-3xl font-bold">{((activeJobs / (jobs.length || 1)) * 100).toFixed(0)}%</div>
+            <div className="text-indigo-100 text-xs md:text-sm mt-1">Job Completion Rate</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold">{((activeSubscriptions / (subscriptions.length || 1)) * 100).toFixed(0)}%</div>
-            <div className="text-indigo-100 text-sm mt-1">Active Subscriptions</div>
+            <div className="text-2xl md:text-3xl font-bold">{((activeSubscriptions / (subscriptions.length || 1)) * 100).toFixed(0)}%</div>
+            <div className="text-indigo-100 text-xs md:text-sm mt-1">Active Subscriptions</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold">{workers.length + employers.length}</div>
-            <div className="text-indigo-100 text-sm mt-1">Total Users</div>
+            <div className="text-2xl md:text-3xl font-bold">{workers.length + employers.length}</div>
+            <div className="text-indigo-100 text-xs md:text-sm mt-1">Total Users</div>
           </div>
         </div>
       </div>
