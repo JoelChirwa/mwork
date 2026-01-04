@@ -12,6 +12,12 @@ const userSchema = new mongoose.Schema(
     profileCompleted: { type: Boolean, default: false },
     onboardingCompletedAt: { type: Date },
 
+    // Account status
+    isSuspended: { type: Boolean, default: false },
+    suspensionReason: { type: String, default: null },
+    suspendedAt: { type: Date, default: null },
+    suspendedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+
     // Worker-specific fields
     skills: { type: [String], default: [] },
     experienceSummary: { type: String, default: '' },

@@ -4,7 +4,8 @@ import { clerkMiddleware } from '@clerk/express'
 import { ENV } from './config/env.js';
 import connectDB from './config/db.js';
 import { serve } from 'inngest/express';
-import { inngest, syncClerkUser } from './config/inngest.js';
+import cors from 'cors';
+import { inngest, syncClerkUser, deleteClerkUser, logAuditEvent, trackJobAnalytics } from './config/inngest.js';
 import onboardingRoutes from './routes/onboarding.routes.js';
 import employerProfileRoutes from './routes/employerProfile.routes.js';
 import jobRoutes from './routes/job.routes.js';
@@ -12,6 +13,7 @@ import subscriptionRoutes from './routes/subscription.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
+app.use(cors());
 
 const __dirname = path.resolve();
 
@@ -22,7 +24,7 @@ app.use(
   '/api/inngest',
   serve({
     client: inngest,
-    functions: [syncClerkUser]
+    functions: [syncClerkUser, deleteClerkUser, logAuditEvent, trackJobAnalytics]
   })
 );
 

@@ -1,7 +1,8 @@
 import User from '../models/User.js';
+import { clerkClient } from '@clerk/express';
 
 export const completeOnboarding = async (req, res) => {
-  const clerkUserId = req.clerkUserId;
+  const clerkUserId = req.user.clerkUserId;
 
   const { role, phoneNumber, location } = req.body;
 
@@ -46,6 +47,19 @@ export const completeOnboarding = async (req, res) => {
   user.onboardingCompletedAt = new Date();
 
   await user.save();
+
+  // Sync role to Clerk metadata for RBAC
+  try {
+    await clerkClient.users.updateUserMetadata(clerkUserId, {
+      publicMetadata: {
+        role: role,
+        profileCompleted: true
+      }
+    });
+  } catch (error) {
+    console.error('Failed to update Clerk metadata:', error);
+    // Continue even if Clerk update fails - we have it in DB
+  }
 
   return res.status(200).json({
     message: 'Onboarding completed successfully',

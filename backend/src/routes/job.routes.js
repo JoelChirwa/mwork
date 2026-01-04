@@ -11,6 +11,8 @@ const router = express.Router();
 router.post('/create', requireAuth, requireEmployer, jobController.createJob);
 router.get('/my-jobs', requireAuth, requireEmployer, jobController.getEmployerJobs);
 router.post('/assign', requireAuth, requireEmployer, jobController.assignWorker);
+router.post('/reject-proposal', requireAuth, requireEmployer, jobController.rejectProposal);
+router.post('/cancel', requireAuth, requireEmployer, jobController.cancelJob);
 
 // Worker routes
 router.get('/open', requireAuth, requireWorker, jobController.getOpenJobs);

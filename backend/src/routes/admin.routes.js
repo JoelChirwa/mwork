@@ -5,15 +5,18 @@ import * as adminController from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
-// User management
 router.get('/workers', requireAuth, requireAdmin, adminController.getAllWorkers);
 router.get('/employers', requireAuth, requireAdmin, adminController.getAllEmployers);
-
-// Job management
 router.get('/jobs', requireAuth, requireAdmin, adminController.getAllJobs);
-
-// Subscription management
 router.get('/subscriptions', requireAuth, requireAdmin, adminController.getAllSubscriptions);
-router.patch('/subscriptions/deactivate/:subscriptionId', requireAuth, requireAdmin, adminController.deactivateSubscription);
+
+// Worker suspension
+router.post('/suspend/:userId', requireAuth, requireAdmin, adminController.suspendWorker);
+router.post('/unsuspend/:userId', requireAuth, requireAdmin, adminController.unsuspendWorker);
+
+// Audit logs & Analytics
+router.get('/audit-logs', requireAuth, requireAdmin, adminController.getAuditLogs);
+router.get('/analytics', requireAuth, requireAdmin, adminController.getAnalytics);
 
 export default router;
+

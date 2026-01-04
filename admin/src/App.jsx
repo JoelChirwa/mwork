@@ -1,18 +1,71 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Workers from './pages/Workers';
+import Employers from './pages/Employers';
+import Jobs from './pages/Jobs';
+import Subscriptions from './pages/Subscriptions';
+
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
+
+const RequireAdmin = ({ children, user }) => {
+  const { signOut } = useClerk();
+  
+  if (!user) return <div>Loading...</div>;
+  if (user.emailAddresses[0].emailAddress !== ADMIN_EMAIL) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+          <p className="text-gray-700 mb-6">This admin panel is restricted to authorized administrators only.</p>
+          <button
+            onClick={() => signOut()}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+    );
+  }
+  return children;
+};
 
 function App() {
-  return (
-    <div>
-      <h1>HOME PAGE</h1>
-      <SignedOut>
-        <SignInButton mode="modal" />
-      </SignedOut>
+  const { user } = useUser();
 
+  return (
+    <>
       <SignedIn>
-        <UserButton />
+        <RequireAdmin user={user}>
+          <div className="flex h-screen">
+            <Sidebar />
+            <div className="flex-1 flex flex-col">
+              <Navbar />
+              <div className="p-4 bg-gray-100 flex-1 overflow-auto">
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/workers" element={<Workers />} />
+                  <Route path="/employers" element={<Employers />} />
+                  <Route path="/jobs" element={<Jobs />} />
+                  <Route path="/subscriptions" element={<Subscriptions />} />
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </div>
+            </div>
+          </div>
+        </RequireAdmin>
       </SignedIn>
-    </div>
-  )
+      <SignedOut>
+        <Routes>
+          <Route path="/*" element={<Login />} />
+        </Routes>
+      </SignedOut>
+    </>
+  );
 }
 
-export default App
+export default App;

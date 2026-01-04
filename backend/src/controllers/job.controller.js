@@ -40,17 +40,91 @@ export const assignWorker = async (req, res) => {
     if (job.employerId.toString() !== req.user._id.toString())
       return res.status(403).json({ message: 'Unauthorized' });
 
+    // Check if proposal exists
+    const proposal = job.proposals.find(p => p.workerId.toString() === workerId.toString());
+    if (!proposal) {
+      return res.status(400).json({ message: 'Worker must submit proposal first' });
+    }
+
     job.assignedWorkerId = workerId;
     job.status = 'ASSIGNED';
     await job.save();
 
     // Trigger Inngest notification
     await inngest.send({
-      name: 'Worker Assigned',
-      data: { workerId, employerName: req.user.fullName, jobTitle: job.title }
+      name: 'job/worker.assigned',
+      data: { 
+        jobId: job._id.toString(),
+        workerId, 
+        employerId: req.user._id.toString(),
+        employerName: req.user.fullName, 
+        jobTitle: job.title 
+      }
     });
 
     return res.status(200).json({ message: 'Worker assigned successfully', job });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Reject Proposal
+export const rejectProposal = async (req, res) => {
+  try {
+    const { jobId, workerId } = req.body;
+
+    const job = await Job.findById(jobId);
+    if (!job) return res.status(404).json({ message: 'Job not found' });
+    if (job.employerId.toString() !== req.user._id.toString())
+      return res.status(403).json({ message: 'Unauthorized' });
+
+    job.proposals = job.proposals.filter(p => p.workerId.toString() !== workerId.toString());
+    await job.save();
+
+    // Trigger Inngest notification
+    await inngest.send({
+      name: 'job/proposal.rejected',
+      data: { 
+        jobId: job._id.toString(),
+        workerId,
+        employerId: req.user._id.toString(),
+        jobTitle: job.title 
+      }
+    });
+
+    return res.status(200).json({ message: 'Proposal rejected', job });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Cancel Job
+export const cancelJob = async (req, res) => {
+  try {
+    const { jobId } = req.body;
+
+    const job = await Job.findById(jobId);
+    if (!job) return res.status(404).json({ message: 'Job not found' });
+    if (job.employerId.toString() !== req.user._id.toString())
+      return res.status(403).json({ message: 'Unauthorized' });
+
+    job.status = 'CANCELLED';
+    await job.save();
+
+    // Trigger Inngest notification
+    await inngest.send({
+      name: 'job/cancelled',
+      data: { 
+        jobId: job._id.toString(),
+        employerId: req.user._id.toString(),
+        assignedWorkerId: job.assignedWorkerId?.toString(),
+        jobTitle: job.title 
+      }
+    });
+
+    return res.status(200).json({ message: 'Job cancelled', job });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
