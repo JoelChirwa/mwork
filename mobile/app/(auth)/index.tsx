@@ -9,7 +9,7 @@ import React from "react";
 import useSocialAuth from "@/hooks/useSocialAuth";
 
 const AuthScreen = () => {
-  const { isLoading, handleSocialAuth } = useSocialAuth();
+  const { loadingStrategy, handleSocialAuth } = useSocialAuth();
 
   return (
     <View className="flex-1 bg-gray-50 px-8">
@@ -31,10 +31,10 @@ const AuthScreen = () => {
         {/* Google */}
         <TouchableOpacity
           className={`flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-4 ${
-            isLoading ? "opacity-60" : ""
+            loadingStrategy === "oauth_google" ? "opacity-60" : ""
           }`}
           onPress={() => handleSocialAuth("oauth_google")}
-          disabled={isLoading}
+          disabled={loadingStrategy === "oauth_google"}
           style={{
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.12,
@@ -42,7 +42,7 @@ const AuthScreen = () => {
             elevation: 2,
           }}
         >
-          {isLoading ? (
+          {loadingStrategy === "oauth_google" ? (
             <ActivityIndicator size="small" color="#4285F4" />
           ) : (
             <>
@@ -61,10 +61,10 @@ const AuthScreen = () => {
         {/* Facebook */}
         <TouchableOpacity
           className={`flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-4 ${
-            isLoading ? "opacity-60" : ""
+            loadingStrategy === "oauth_facebook" ? "opacity-60" : ""
           }`}
           onPress={() => handleSocialAuth("oauth_facebook")}
-          disabled={isLoading}
+          disabled={loadingStrategy === "oauth_facebook"}
           style={{
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.12,
@@ -72,7 +72,7 @@ const AuthScreen = () => {
             elevation: 2,
           }}
         >
-          {isLoading ? (
+          {loadingStrategy === "oauth_facebook" ? (
             <ActivityIndicator size="small" color="#1877F2" />
           ) : (
             <>
